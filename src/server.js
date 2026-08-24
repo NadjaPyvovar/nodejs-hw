@@ -19,6 +19,12 @@ app.use(cors());
 
 app.use(notesRoutes);
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Node.js HW API is running",
+  });
+});
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
