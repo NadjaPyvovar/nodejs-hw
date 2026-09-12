@@ -1,6 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
+import { errors } from "celebrate";
 
 import { connectMongoDB } from "./db/connectMongoDB.js";
 import { logger } from "./middleware/logger.js";
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
   });
 });
 
+app.use(errors()); // celebrate error handler middleware
 app.use(notFoundHandler);
 app.use(errorHandler);
 
