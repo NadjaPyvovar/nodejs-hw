@@ -1,10 +1,41 @@
 import { Note } from "../models/note.js";
 import createHttpError from "http-errors";
 
+// updated controller functions to handle pagination, filtering, and searching
 export const getAllNotes = async (req, res) => {
-  const notes = await Note.find();
+  const { page, perPage, tag, search } = req.query;
 
-  res.status(200).json(notes);
+  const skip = (page - 1) * perPage;
+
+  let notesQuery = Note.find();
+
+  if (tag) {
+    notesQuery = notesQuery.where("tag").equals(tag);
+  }
+
+  if (search) {
+    notesQuery = notesQuery.where({
+      $or: [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+      ],
+    });
+  }
+
+  const [notes, totalNotes] = await Promise.all([
+    notesQuery.clone().skip(skip).limit(perPage),
+    Note.countDocuments(notesQuery.getFilter()),
+  ]);
+
+  const totalPages = Math.ceil(totalNotes / perPage);
+
+  res.status(200).json({
+    page,
+    perPage,
+    totalNotes,
+    totalPages,
+    notes,
+  });
 };
 
 export const getNoteById = async (req, res) => {

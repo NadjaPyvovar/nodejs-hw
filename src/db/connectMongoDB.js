@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import dns from "node:dns";
+
+// needed on my Windows setup as the default DNS resolver can't handle the SRV lookups used by mongodb+srv:// URLs
+dns.setServers(["1.1.1.1"]);
+
 
 export const connectMongoDB = async () => {
   try {
