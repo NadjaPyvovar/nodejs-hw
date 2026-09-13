@@ -34,7 +34,8 @@ const noteSchema = new Schema(
 );
 
 noteSchema.index({ tag: 1 });
+noteSchema.index({ userId: 1, tag: 1 }); // compound index for combined filter 
 
 export const Note = model("Note", noteSchema);
 
-// adding userId, so that every note must belong now to a user 
+// adding userId, so that every note must belong now to a user

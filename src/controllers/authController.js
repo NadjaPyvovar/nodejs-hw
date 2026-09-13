@@ -60,6 +60,12 @@ export const refreshUserSession = async (req, res) => {
   }
 
   if (session.refreshTokenValidUntil < new Date()) {
+    await Session.deleteOne({ _id: sessionId });
+
+    res.clearCookie("sessionId");
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
     throw createHttpError(401, "Session token expired");
   }
 
@@ -88,4 +94,4 @@ export const logoutUser = async (req, res) => {
 };
 
 // notes: registerUser => rejects duplicate emails, then hashed with bcrypt.hash(password, 10) (where 10 salt rounds in standard default), then creates the session/cookies; loginUser returning "Invalid credentials" whether the email does not exist or password is wrong; refreshUserSession => validating the session by both sessionId & refreshToken; logoutUser: res.clearCookie(name) => sends a Set-Cookie header with the same name but an expiry in the past, i.e. telling the browser to delete it (i.e. 204 = "success, no content")
-
+// insider the expired-token session, before throwing error, to delete the stale session from the database and clear all three cookies on the response, so the client isn't left with cookies pointing to a session no longer working, only hereafter throwing createHttpError(...) triggering errorHandler & returning 401 status, as res.clearCookie(...) queues Set-Cookie headers (i.e. it does not send the response, thus the subsequent throw still reachers error middleware)
