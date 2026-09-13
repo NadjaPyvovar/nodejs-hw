@@ -27,14 +27,15 @@ app.use(
   }),
 );
 
-app.use(authRoutes);
-app.use(notesRoutes);
-
+// placing health check before authRoutes/notesRoutes otherwise on render: {"message":"Missing access token"}
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "Node.js HW API is running",
   });
 });
+
+app.use(authRoutes);
+app.use(notesRoutes);
 
 app.use(errors()); // celebrate error handler middleware
 app.use(notFoundHandler);
@@ -47,4 +48,4 @@ app.listen(PORT, () => {
 });
 
 
-// notes: cookieParser() middleware populates req.cookies; cors() needs credentials: true (otherwise the browser won't let cookies to flow cross-origin); origin: true reflects which origin made the request (required as CORS forbids origin: "*" when credentials: true is set) 
+// notes: cookieParser() middleware populates req.cookies; cors() needs credentials: true (otherwise the browser won't let cookies to flow cross-origin); origin: true reflects which origin made the request (required as CORS forbids origin: "*" when credentials: true is set)
