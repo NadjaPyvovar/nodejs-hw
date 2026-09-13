@@ -24,11 +24,10 @@ const userSchema = new Schema(
 );
 
 // defaulting the username to the email when a new user is created
-userSchema.pre("save", function (next) {
+userSchema.pre("save", function () {
   if (this.isNew && !this.username) {
     this.username = this.email;
   }
-  next();
 });
 
 // stripping the password prior to the document to be serialized to JSON
