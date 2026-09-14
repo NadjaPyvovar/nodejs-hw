@@ -11,6 +11,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 
 app.use(authRoutes);
 app.use(notesRoutes);
+app.use(userRoutes);
 
 app.use(errors()); // celebrate error handler middleware
 app.use(notFoundHandler);

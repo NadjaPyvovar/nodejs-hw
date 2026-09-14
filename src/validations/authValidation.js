@@ -13,3 +13,17 @@ export const loginUserSchema = {
     password: Joi.string().required(),
   }),
 };
+
+// adding schemas for reset email & password
+export const requestResetEmailSchema = {
+  [Segments.BODY]: Joi.object({
+    email: Joi.string().email().required(),
+  }),
+};
+
+export const resetPasswordSchema = {
+  [Segments.BODY]: Joi.object({
+    token: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
+};
