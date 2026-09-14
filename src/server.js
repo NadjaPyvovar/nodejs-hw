@@ -39,8 +39,8 @@ app.use(authRoutes);
 app.use(notesRoutes);
 app.use(userRoutes);
 
-app.use(errors()); // celebrate error handler middleware
 app.use(notFoundHandler);
+app.use(errors()); // celebrate error handler middleware
 app.use(errorHandler);
 
 await connectMongoDB();

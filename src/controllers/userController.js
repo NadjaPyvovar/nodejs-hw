@@ -13,10 +13,10 @@ export const updateUserAvatar = async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.user._id,
     { avatar: result.secure_url },
-    { new: true },
+    { returnDocument: "after"  },
   );
 
   res.status(200).json({ url: user.avatar });
 };
 
-// req.file: populated by upload.single("avatar") middleware (if missing, the filed was not send or was rejected by fileFilter => 400 No file); result.secure_url: Cloudinary HTTPS URL for uploaded img (get saved on the user docs); { new: true }: tells findByIdAndUpdate to return the doc after the update 
+// req.file: populated by upload.single("avatar") middleware (if missing, the filed was not send or was rejected by fileFilter => 400 No file); result.secure_url: Cloudinary HTTPS URL for uploaded img (get saved on the user docs); { returnDocument: "after"  }: tells findByIdAndUpdate to return the doc after the update
